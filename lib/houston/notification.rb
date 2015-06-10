@@ -29,7 +29,7 @@ module Houston
 
     MAXIMUM_PAYLOAD_SIZE = 2048
 
-    attr_accessor :token, :alert, :badge, :sound, :category, :content_available, :custom_data, :id, :expiry, :priority
+    attr_accessor :token, :alert, :badge, :sound, :category, :content_available, :custom_data, :id, :expiry, :priority, :extra_data
     attr_reader :sent_at
     attr_writer :apns_error_code
 
@@ -46,19 +46,21 @@ module Houston
       @id = options.delete(:id)
       @priority = options.delete(:priority)
       @content_available = options.delete(:content_available)
+      @extra_data = options.delete(:extra_data)
 
       @custom_data = options
     end
 
     def payload
       json = {}.merge(@custom_data || {}).inject({}){|h,(k,v)| h[k.to_s] = v; h}
-
       json['aps'] ||= {}
       json['aps']['alert'] = @alert if @alert
       json['aps']['badge'] = @badge.to_i rescue 0 if @badge
       json['aps']['sound'] = @sound if @sound
       json['aps']['category'] = @category if @category
       json['aps']['content-available'] = 1 if @content_available
+
+      json.merge!(@extra_data)  # same level as aps
 
       json
     end

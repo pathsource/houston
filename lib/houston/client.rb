@@ -37,6 +37,8 @@ module Houston
 
       notifications.flatten!
 
+
+
       Connection.open(@gateway_uri, @certificate, @passphrase) do |connection|
         ssl = connection.ssl
 
@@ -46,6 +48,8 @@ module Houston
           next unless notification.valid?
 
           notification.id = index
+
+          # puts notification.payload
 
           connection.write(notification.message)
           notification.mark_as_sent!
