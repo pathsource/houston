@@ -49,7 +49,6 @@ module Houston
 
           notification.id = index
 
-          # puts notification.payload
 
           connection.write(notification.message)
           notification.mark_as_sent!
