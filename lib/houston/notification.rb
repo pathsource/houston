@@ -60,7 +60,7 @@ module Houston
       json['aps']['category'] = @category if @category
       json['aps']['content-available'] = 1 if @content_available
 
-      json.merge!(@extra_data)  # same level as aps
+      json.merge!(@extra_data) unless @extra_data.nil? # same level as aps
 
       json
     end
